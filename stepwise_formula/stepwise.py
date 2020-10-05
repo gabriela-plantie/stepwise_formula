@@ -8,6 +8,7 @@ def stepwise(formula, dataframe, model_type):
     formula = splitted[1]
     f = Formula.fromString(formula)
 
+    dataframe = dataframe.copy()
     for term in filter(lambda x: isinstance(x, Formula), f.terms()):
         dataframe[term.__repr__()] = term.apply(dataframe)
     
