@@ -1,32 +1,16 @@
-```python
-#jupyter nbconvert README.ipynb --to markdown
-```
+## What it does:
+
+This packages receives a data frame and function that could have multiplicative terms and runs setpwise selection from this package.
+
+https://github.com/talhahascelik/python_stepwiseSelection
 
 ## Install package
 
 
 ```python
+%%capture
 !pip3 install git+git://github.com/gabriela-plantie/stepwise_formula
 ```
-
-    Collecting git+git://github.com/gabriela-plantie/stepwise_formula
-      Cloning git://github.com/gabriela-plantie/stepwise_formula to /tmp/pip-req-build-erk__6k6
-      Running command git clone -q git://github.com/gabriela-plantie/stepwise_formula /tmp/pip-req-build-erk__6k6
-    Requirement already satisfied (use --upgrade to upgrade): stepwise-formula==0.0.1 from git+git://github.com/gabriela-plantie/stepwise_formula in /home/gaby/.local/lib/python3.8/site-packages
-    Requirement already satisfied: numpy>=1.19.2 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (1.19.2)
-    Requirement already satisfied: pandas>=1.1.2 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (1.1.2)
-    Requirement already satisfied: statsmodels>=0.12.0 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (0.12.0)
-    Requirement already satisfied: pytz>=2017.2 in /home/gaby/.local/lib/python3.8/site-packages (from pandas>=1.1.2->stepwise-formula==0.0.1) (2020.1)
-    Requirement already satisfied: python-dateutil>=2.7.3 in /home/gaby/.local/lib/python3.8/site-packages (from pandas>=1.1.2->stepwise-formula==0.0.1) (2.8.1)
-    Requirement already satisfied: scipy>=1.1 in /home/gaby/.local/lib/python3.8/site-packages (from statsmodels>=0.12.0->stepwise-formula==0.0.1) (1.5.2)
-    Requirement already satisfied: patsy>=0.5 in /home/gaby/.local/lib/python3.8/site-packages (from statsmodels>=0.12.0->stepwise-formula==0.0.1) (0.5.1)
-    Requirement already satisfied: six>=1.5 in /usr/lib/python3/dist-packages (from python-dateutil>=2.7.3->pandas>=1.1.2->stepwise-formula==0.0.1) (1.14.0)
-    Building wheels for collected packages: stepwise-formula
-      Building wheel for stepwise-formula (setup.py) ... [?25ldone
-    [?25h  Created wheel for stepwise-formula: filename=stepwise_formula-0.0.1-py3-none-any.whl size=8422 sha256=0f52650742cc39db820f5276094e354e4dd88c02ac6d3a248e9621e14a043294
-      Stored in directory: /tmp/pip-ephem-wheel-cache-cmizbg47/wheels/18/c1/3b/ea625303e5c0fc27e4ada46d58cafe2b64cc55de8ec014afa8
-    Successfully built stepwise-formula
-
 
 
 ```python
@@ -178,9 +162,19 @@ plt.scatter(pr, pred)
 
 
     
-![png](README_files/README_17_1.png)
+![png](README_files/README_18_1.png)
     
 
+
+
+```python
+
+```
+
+
+```python
+#jupyter nbconvert README.ipynb --to markdown
+```
 
 
 ```python
