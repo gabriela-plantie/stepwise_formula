@@ -41,41 +41,31 @@ class Formula:
     
     def terms(self):
         terms = set()
-        
-        if self.operation.symbol == '*' or self.operation.symbol == ':':
-            
-            if isinstance(self.term1, Formula):
-                t1 = self.term1.terms()
-            else:
-                t1 = set()
-                t1.add(self.term1)
-                
-            if isinstance(self.term2, Formula):
-                t2 = self.term2.terms()
-            else:
-                t2 = set()
-                t2.add(self.term2)
-            
-            terms = terms.union(t1)
-            terms = terms.union(t2)
 
+        if isinstance(self.term1, Formula):
+            t1 = self.term1.terms()
+        else:
+            t1 = set()
+            t1.add(self.term1)
+            
+        if isinstance(self.term2, Formula):
+            t2 = self.term2.terms()
+        else:
+            t2 = set()
+            t2.add(self.term2)
+
+        terms = terms.union(t1)
+        terms = terms.union(t2)
+
+        if self.operation.symbol == '*' or self.operation.symbol == ':':        
             terms = terms.union([Formula(Formula.multiplication, x1, x2) for x1 in t1 for x2 in t2])
-
             if self.operation.symbol == ':':
                 return terms
         
-        if isinstance(self.term1, Formula):
-            terms = terms.union(self.term1.terms())
-        else:
-            terms.add(self.term1)
-            
-        if isinstance(self.term2, Formula):
-            terms = terms.union(self.term2.terms())
-        else:
-            terms.add(self.term2)
-        
         return terms
-    
+
+
+
     def simpleTerms(self):
         terms = set()
         
@@ -95,7 +85,10 @@ class Formula:
         return str(self.term1) + self.operation.symbol + str(self.term2)
         
     def __eq__(self, other):
-        return (self.term1 == other.term1 and self.term2 == other.term2 and self.operation == self.operation) or (self.term1 == other.term2 and self.term2 == other.term1 and self.operation == self.operation)
-    
+        if self.__class__ != other.__class__:
+            return False
+        
+        return ((self.term1 == other.term1 and self.term2 == other.term2 and self.operation == self.operation) or
+            (self.term1 == other.term2 and self.term2 == other.term1 and self.operation == self.operation))    
     def __hash__(self):
         return hash(list(self.simpleTerms()).sort())
