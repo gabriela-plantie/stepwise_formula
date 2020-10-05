@@ -1,18 +1,32 @@
 ```python
-#!python3 -m pip install /mnt/c/Users/AR00127255/Documents/00_git/python/stepwise_formula/
-#!pip3 install nbconvert
-
-#jupyter nbconvert --ClearMetadataPreprocessor.enabled=True --ClearOutput.enabled=True --to markdown README.ipynb
+#jupyter nbconvert README.ipynb --to markdown
 ```
+
+## Install package
 
 
 ```python
-import sys
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/mnt/c/Users/AR00127255/Documents/00_git/python/stepwise_formula')
-
-
+!pip3 install git+git://github.com/gabriela-plantie/stepwise_formula
 ```
+
+    Collecting git+git://github.com/gabriela-plantie/stepwise_formula
+      Cloning git://github.com/gabriela-plantie/stepwise_formula to /tmp/pip-req-build-erk__6k6
+      Running command git clone -q git://github.com/gabriela-plantie/stepwise_formula /tmp/pip-req-build-erk__6k6
+    Requirement already satisfied (use --upgrade to upgrade): stepwise-formula==0.0.1 from git+git://github.com/gabriela-plantie/stepwise_formula in /home/gaby/.local/lib/python3.8/site-packages
+    Requirement already satisfied: numpy>=1.19.2 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (1.19.2)
+    Requirement already satisfied: pandas>=1.1.2 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (1.1.2)
+    Requirement already satisfied: statsmodels>=0.12.0 in /home/gaby/.local/lib/python3.8/site-packages (from stepwise-formula==0.0.1) (0.12.0)
+    Requirement already satisfied: pytz>=2017.2 in /home/gaby/.local/lib/python3.8/site-packages (from pandas>=1.1.2->stepwise-formula==0.0.1) (2020.1)
+    Requirement already satisfied: python-dateutil>=2.7.3 in /home/gaby/.local/lib/python3.8/site-packages (from pandas>=1.1.2->stepwise-formula==0.0.1) (2.8.1)
+    Requirement already satisfied: scipy>=1.1 in /home/gaby/.local/lib/python3.8/site-packages (from statsmodels>=0.12.0->stepwise-formula==0.0.1) (1.5.2)
+    Requirement already satisfied: patsy>=0.5 in /home/gaby/.local/lib/python3.8/site-packages (from statsmodels>=0.12.0->stepwise-formula==0.0.1) (0.5.1)
+    Requirement already satisfied: six>=1.5 in /usr/lib/python3/dist-packages (from python-dateutil>=2.7.3->pandas>=1.1.2->stepwise-formula==0.0.1) (1.14.0)
+    Building wheels for collected packages: stepwise-formula
+      Building wheel for stepwise-formula (setup.py) ... [?25ldone
+    [?25h  Created wheel for stepwise-formula: filename=stepwise_formula-0.0.1-py3-none-any.whl size=8422 sha256=0f52650742cc39db820f5276094e354e4dd88c02ac6d3a248e9621e14a043294
+      Stored in directory: /tmp/pip-ephem-wheel-cache-cmizbg47/wheels/18/c1/3b/ea625303e5c0fc27e4ada46d58cafe2b64cc55de8ec014afa8
+    Successfully built stepwise-formula
+
 
 
 ```python
@@ -22,7 +36,6 @@ from stepwise_formula.stepwise import stepwise
 
 ```python
 import pandas as pd
-import stepwiseSelection as ss
 import numpy as np
 import scipy as sc
 from matplotlib import pyplot as plt
@@ -37,136 +50,23 @@ import statsmodels.api as sm
 x1=np.random.normal(0,1,1000)
 x2=np.random.normal(0,1,1000)
 x3=np.random.normal(0,1,1000)
+x4=np.random.normal(0,1,1000)/5
 
-z=1 + 2*x1 + 3*x2 + 2*x2*x3
+z=1 + 2*x1 + 3*x2 + 2*x2*x3 + x4
 pr=1/(1+np.exp(-z))
 y=sc.stats.binom.rvs(1, pr, size=1000)
-df = pd.DataFrame(data={'y':y, 'x1':x1, 'x2':x2, 'x3':x3})
+df = pd.DataFrame(data={'y':y, 'x1':x1, 'x2':x2, 'x3':x3, 'x4':x4})
 
-df
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>y</th>
-      <th>x1</th>
-      <th>x2</th>
-      <th>x3</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>0.400647</td>
-      <td>0.912170</td>
-      <td>-0.407610</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0</td>
-      <td>-0.381995</td>
-      <td>-0.521871</td>
-      <td>-0.332622</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1</td>
-      <td>0.808790</td>
-      <td>-1.852113</td>
-      <td>-1.483820</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0</td>
-      <td>-0.908704</td>
-      <td>-0.741722</td>
-      <td>0.690781</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0</td>
-      <td>-2.907574</td>
-      <td>0.715674</td>
-      <td>-0.205838</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>995</th>
-      <td>0</td>
-      <td>-1.572050</td>
-      <td>0.452111</td>
-      <td>-0.533114</td>
-    </tr>
-    <tr>
-      <th>996</th>
-      <td>1</td>
-      <td>-0.086163</td>
-      <td>1.568952</td>
-      <td>-0.210293</td>
-    </tr>
-    <tr>
-      <th>997</th>
-      <td>1</td>
-      <td>-0.084428</td>
-      <td>-0.006555</td>
-      <td>0.177014</td>
-    </tr>
-    <tr>
-      <th>998</th>
-      <td>0</td>
-      <td>0.549745</td>
-      <td>-1.952399</td>
-      <td>0.222176</td>
-    </tr>
-    <tr>
-      <th>999</th>
-      <td>1</td>
-      <td>-0.023178</td>
-      <td>-0.205812</td>
-      <td>-1.429448</td>
-    </tr>
-  </tbody>
-</table>
-<p>1000 rows × 4 columns</p>
-</div>
-
-
+## Define formula
 
 
 ```python
-formula = 'y ~ x1 + x2*x3'
+formula = 'y ~ x1 + x2*x3*x4'
 ```
 
-
-```python
-
-```
+## Run stepwise using formula
 
 
 ```python
@@ -175,263 +75,89 @@ a = stepwise(formula, df, 'logistic')
 
     Character Variables (Dummies Generated, First Dummies Dropped): []
     Optimization terminated successfully.
-             Current function value: 0.306144
+             Current function value: 0.292915
              Iterations 8
     Eliminated : x3
     Optimization terminated successfully.
-             Current function value: 0.306759
+             Current function value: 0.292943
+             Iterations 8
+    Eliminated : x2*x4
+    Optimization terminated successfully.
+             Current function value: 0.293177
+             Iterations 8
+    Eliminated : x3*x4
+    Optimization terminated successfully.
+             Current function value: 0.293655
+             Iterations 8
+    Eliminated : x2*x3*x4
+    Optimization terminated successfully.
+             Current function value: 0.294603
              Iterations 8
                                Logit Regression Results                           
     ==============================================================================
     Dep. Variable:                      y   No. Observations:                 1000
-    Model:                          Logit   Df Residuals:                      996
-    Method:                           MLE   Df Model:                            3
-    Date:                Mon, 05 Oct 2020   Pseudo R-squ.:                  0.5503
-    Time:                        13:30:39   Log-Likelihood:                -306.76
-    converged:                       True   LL-Null:                       -682.15
-    Covariance Type:            nonrobust   LLR p-value:                2.032e-162
+    Model:                          Logit   Df Residuals:                      995
+    Method:                           MLE   Df Model:                            4
+    Date:                Mon, 05 Oct 2020   Pseudo R-squ.:                  0.5609
+    Time:                        15:54:56   Log-Likelihood:                -294.60
+    converged:                       True   LL-Null:                       -670.93
+    Covariance Type:            nonrobust   LLR p-value:                1.377e-161
     ==============================================================================
                      coef    std err          z      P>|z|      [0.025      0.975]
     ------------------------------------------------------------------------------
-    intercept      0.8825      0.111      7.953      0.000       0.665       1.100
-    x1             2.0871      0.157     13.306      0.000       1.780       2.395
-    x2             3.0325      0.220     13.798      0.000       2.602       3.463
-    x2*x3          2.0036      0.183     10.966      0.000       1.645       2.362
+    intercept      1.1250      0.121      9.327      0.000       0.889       1.361
+    x1             2.1661      0.171     12.636      0.000       1.830       2.502
+    x2             3.3304      0.247     13.479      0.000       2.846       3.815
+    x4             1.2785      0.526      2.431      0.015       0.248       2.309
+    x2*x3          2.1017      0.204     10.323      0.000       1.703       2.501
     ==============================================================================
-    AIC: 621.5181287616882
-    BIC: 641.1491498776168
-    Final Variables: ['intercept', 'x1', 'x2', 'x2*x3']
+    AIC: 599.2050648684576
+    BIC: 623.7438412633683
+    Final Variables: ['intercept', 'x1', 'x2', 'x4', 'x2*x3']
 
+
+## filter final list of variables by pvalue
 
 
 ```python
-df
+np.round(a[2].params[a[2].pvalues<0.01],2)
 ```
 
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>y</th>
-      <th>x1</th>
-      <th>x2</th>
-      <th>x3</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>1</td>
-      <td>0.400647</td>
-      <td>0.912170</td>
-      <td>-0.407610</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0</td>
-      <td>-0.381995</td>
-      <td>-0.521871</td>
-      <td>-0.332622</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>1</td>
-      <td>0.808790</td>
-      <td>-1.852113</td>
-      <td>-1.483820</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>0</td>
-      <td>-0.908704</td>
-      <td>-0.741722</td>
-      <td>0.690781</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0</td>
-      <td>-2.907574</td>
-      <td>0.715674</td>
-      <td>-0.205838</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>995</th>
-      <td>0</td>
-      <td>-1.572050</td>
-      <td>0.452111</td>
-      <td>-0.533114</td>
-    </tr>
-    <tr>
-      <th>996</th>
-      <td>1</td>
-      <td>-0.086163</td>
-      <td>1.568952</td>
-      <td>-0.210293</td>
-    </tr>
-    <tr>
-      <th>997</th>
-      <td>1</td>
-      <td>-0.084428</td>
-      <td>-0.006555</td>
-      <td>0.177014</td>
-    </tr>
-    <tr>
-      <th>998</th>
-      <td>0</td>
-      <td>0.549745</td>
-      <td>-1.952399</td>
-      <td>0.222176</td>
-    </tr>
-    <tr>
-      <th>999</th>
-      <td>1</td>
-      <td>-0.023178</td>
-      <td>-0.205812</td>
-      <td>-1.429448</td>
-    </tr>
-  </tbody>
-</table>
-<p>1000 rows × 4 columns</p>
-</div>
+    intercept    1.12
+    x1           2.17
+    x2           3.33
+    x2*x3        2.10
+    dtype: float64
 
 
+
+## generate model with resulting varibles
 
 
 ```python
-formula = 'y ~ x1 + x2*x3'
-```
-
-
-```python
-a = stepwise(formula, df, 'logistic')
-```
-
-    Character Variables (Dummies Generated, First Dummies Dropped): []
-    Optimization terminated successfully.
-             Current function value: 0.306144
-             Iterations 8
-    Eliminated : x3
-    Optimization terminated successfully.
-             Current function value: 0.306759
-             Iterations 8
-                               Logit Regression Results                           
-    ==============================================================================
-    Dep. Variable:                      y   No. Observations:                 1000
-    Model:                          Logit   Df Residuals:                      996
-    Method:                           MLE   Df Model:                            3
-    Date:                Mon, 05 Oct 2020   Pseudo R-squ.:                  0.5503
-    Time:                        13:30:44   Log-Likelihood:                -306.76
-    converged:                       True   LL-Null:                       -682.15
-    Covariance Type:            nonrobust   LLR p-value:                2.032e-162
-    ==============================================================================
-                     coef    std err          z      P>|z|      [0.025      0.975]
-    ------------------------------------------------------------------------------
-    intercept      0.8825      0.111      7.953      0.000       0.665       1.100
-    x1             2.0871      0.157     13.306      0.000       1.780       2.395
-    x2             3.0325      0.220     13.798      0.000       2.602       3.463
-    x2*x3          2.0036      0.183     10.966      0.000       1.645       2.362
-    ==============================================================================
-    AIC: 621.5181287616882
-    BIC: 641.1491498776168
-    Final Variables: ['intercept', 'x1', 'x2', 'x2*x3']
-
-
-
-```python
-a[2].summary()
-```
-
-
-
-
-<table class="simpletable">
-<caption>Logit Regression Results</caption>
-<tr>
-  <th>Dep. Variable:</th>           <td>y</td>        <th>  No. Observations:  </th>   <td>  1000</td>  
-</tr>
-<tr>
-  <th>Model:</th>                 <td>Logit</td>      <th>  Df Residuals:      </th>   <td>   996</td>  
-</tr>
-<tr>
-  <th>Method:</th>                 <td>MLE</td>       <th>  Df Model:          </th>   <td>     3</td>  
-</tr>
-<tr>
-  <th>Date:</th>            <td>Mon, 05 Oct 2020</td> <th>  Pseudo R-squ.:     </th>   <td>0.5503</td>  
-</tr>
-<tr>
-  <th>Time:</th>                <td>14:19:59</td>     <th>  Log-Likelihood:    </th>  <td> -306.76</td> 
-</tr>
-<tr>
-  <th>converged:</th>             <td>True</td>       <th>  LL-Null:           </th>  <td> -682.15</td> 
-</tr>
-<tr>
-  <th>Covariance Type:</th>     <td>nonrobust</td>    <th>  LLR p-value:       </th> <td>2.032e-162</td>
-</tr>
-</table>
-<table class="simpletable">
-<tr>
-      <td></td>         <th>coef</th>     <th>std err</th>      <th>z</th>      <th>P>|z|</th>  <th>[0.025</th>    <th>0.975]</th>  
-</tr>
-<tr>
-  <th>intercept</th> <td>    0.8825</td> <td>    0.111</td> <td>    7.953</td> <td> 0.000</td> <td>    0.665</td> <td>    1.100</td>
-</tr>
-<tr>
-  <th>x1</th>        <td>    2.0871</td> <td>    0.157</td> <td>   13.306</td> <td> 0.000</td> <td>    1.780</td> <td>    2.395</td>
-</tr>
-<tr>
-  <th>x2</th>        <td>    3.0325</td> <td>    0.220</td> <td>   13.798</td> <td> 0.000</td> <td>    2.602</td> <td>    3.463</td>
-</tr>
-<tr>
-  <th>x2*x3</th>     <td>    2.0036</td> <td>    0.183</td> <td>   10.966</td> <td> 0.000</td> <td>    1.645</td> <td>    2.362</td>
-</tr>
-</table>
-
-
-
-
-```python
-a[0][1:]
-```
-
-
-
-
-    ['x1', 'x2', 'x2*x3']
-
-
-
-## generate model with resulting varibles:
-
-
-```python
-formula = 'y ~ x1 + x2 + x2*x3'
+formula = 'y ~ x1 + x2 + x2:x3'
 model = smf.glm(formula = formula, data=df, family=sm.families.Binomial())
 mod = model.fit()
 ```
+
+
+```python
+np.round(mod.params[mod.pvalues<0.01],2)
+```
+
+
+
+
+    Intercept    1.09
+    x1           2.12
+    x2           3.27
+    x2:x3        2.07
+    dtype: float64
+
+
 
 
 ```python
@@ -446,7 +172,7 @@ plt.scatter(pr, pred)
 
 
 
-    <matplotlib.collections.PathCollection object at 0x7fd9c283fc40>
+    <matplotlib.collections.PathCollection at 0x7f4c23d573d0>
 
 
 
@@ -455,3 +181,8 @@ plt.scatter(pr, pred)
 ![png](README_files/README_17_1.png)
     
 
+
+
+```python
+
+```
