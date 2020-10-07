@@ -7,7 +7,7 @@ def stepwise(formula, dataframe, model_type):
     y_name = splitted[0]
     formula = splitted[1]
     f = Formula.fromString(formula)
-
+    print(f.terms())
     dataframe = dataframe.copy()
     for term in filter(lambda x: isinstance(x, Formula), f.terms()):
         dataframe[term.__repr__()] = term.apply(dataframe)

@@ -57,10 +57,13 @@ class Formula:
         terms = terms.union(t1)
         terms = terms.union(t2)
 
-        if self.operation.symbol == '*' or self.operation.symbol == ':':        
+        
+        if self.operation.symbol == ':' :        
+            terms = ([Formula(Formula.multiplication, x1, x2) for x1 in t1 for x2 in t2])
+            
+        if self.operation.symbol == '*':        
             terms = terms.union([Formula(Formula.multiplication, x1, x2) for x1 in t1 for x2 in t2])
-            if self.operation.symbol == ':':
-                return terms
+              
         
         return terms
 
