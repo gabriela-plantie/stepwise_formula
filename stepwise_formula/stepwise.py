@@ -12,8 +12,8 @@ def stepwise(formula, dataframe, model_type):
     for term in filter(lambda x: isinstance(x, Formula), f.terms()):
         dataframe[term.__repr__()] = term.apply(dataframe)
     
-    #X = dataframe.drop(columns=[y_name])
-    X = dataframe[map(lambda x: x.__repr__() ,f.terms())]
+    usedFields = map(lambda x: x.__repr__() if isinstance(x, Formula) else x ,f.terms())
+    X = dataframe[usedFields]
     y = dataframe[y_name]
 
     return backwardSelection(X,y, model_type=model_type)
