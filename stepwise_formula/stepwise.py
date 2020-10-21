@@ -13,7 +13,7 @@ def stepwise(formula, dataframe, model_type):
         dataframe[term.__repr__()] = term.apply(dataframe)
     
     #X = dataframe.drop(columns=[y_name])
-    X = dataframe[map(lambda x: x.__repr__() ,f.terms()]
+    X = dataframe[map(lambda x: x.__repr__() ,f.terms())]
     y = dataframe[y_name]
 
     return backwardSelection(X,y, model_type=model_type)
