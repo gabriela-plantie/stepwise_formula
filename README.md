@@ -82,7 +82,7 @@ model = stepwise(formula, df, 'logistic')
     Model:                          Logit   Df Residuals:                      996
     Method:                           MLE   Df Model:                            3
     Date:                Thu, 22 Oct 2020   Pseudo R-squ.:                  0.1806
-    Time:                        15:38:16   Log-Likelihood:                -541.26
+    Time:                        17:14:54   Log-Likelihood:                -541.26
     converged:                       True   LL-Null:                       -660.53
     Covariance Type:            nonrobust   LLR p-value:                 1.954e-51
     ==============================================================================
@@ -102,12 +102,21 @@ model = stepwise(formula, df, 'logistic')
 
 
 ```python
+testResults= model.predict(df)
+```
+
+    prediction
+    Index(['intercept', 'x2*x3', 'x2', 'x1*x4'], dtype='object')
+
+
+
+```python
 t=testResults.testDataframe
 ```
 
 
 ```python
-t['pred']= model.model.predict(t[model.model.params.index])
+t['pred'] = testResults.prediction
 ```
 
 
@@ -119,6 +128,7 @@ t
 
 
 <div>
+
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -127,7 +137,6 @@ t
       <th>x2*x3</th>
       <th>x2</th>
       <th>x1*x4</th>
-      <th>ord</th>
       <th>pred</th>
     </tr>
   </thead>
@@ -139,7 +148,6 @@ t
       <td>0.452175</td>
       <td>-0.142610</td>
       <td>0.715952</td>
-      <td>0.715952</td>
     </tr>
     <tr>
       <th>1</th>
@@ -147,7 +155,6 @@ t
       <td>-0.830760</td>
       <td>1.134899</td>
       <td>-0.016467</td>
-      <td>0.558363</td>
       <td>0.558363</td>
     </tr>
     <tr>
@@ -157,7 +164,6 @@ t
       <td>0.077442</td>
       <td>-0.178077</td>
       <td>0.592518</td>
-      <td>0.592518</td>
     </tr>
     <tr>
       <th>3</th>
@@ -165,7 +171,6 @@ t
       <td>-0.494669</td>
       <td>0.226821</td>
       <td>0.098642</td>
-      <td>0.558039</td>
       <td>0.558039</td>
     </tr>
     <tr>
@@ -175,11 +180,9 @@ t
       <td>0.526648</td>
       <td>-0.051086</td>
       <td>0.761861</td>
-      <td>0.761861</td>
     </tr>
     <tr>
       <th>...</th>
-      <td>...</td>
       <td>...</td>
       <td>...</td>
       <td>...</td>
@@ -193,7 +196,6 @@ t
       <td>0.897219</td>
       <td>-0.107829</td>
       <td>0.702047</td>
-      <td>0.702047</td>
     </tr>
     <tr>
       <th>996</th>
@@ -201,7 +203,6 @@ t
       <td>-0.256417</td>
       <td>-0.577262</td>
       <td>-0.017205</td>
-      <td>0.465798</td>
       <td>0.465798</td>
     </tr>
     <tr>
@@ -211,7 +212,6 @@ t
       <td>0.904900</td>
       <td>-0.002307</td>
       <td>0.801311</td>
-      <td>0.801311</td>
     </tr>
     <tr>
       <th>998</th>
@@ -219,7 +219,6 @@ t
       <td>0.405615</td>
       <td>1.120783</td>
       <td>-0.008264</td>
-      <td>0.871228</td>
       <td>0.871228</td>
     </tr>
     <tr>
@@ -229,11 +228,10 @@ t
       <td>-0.420349</td>
       <td>0.077656</td>
       <td>0.516808</td>
-      <td>0.516808</td>
     </tr>
   </tbody>
 </table>
-<p>1000 rows × 6 columns</p>
+<p>1000 rows × 5 columns</p>
 </div>
 
 
@@ -248,13 +246,13 @@ plt.scatter(list(map(lambda p: np.log(p/(1-p)), t['pred'])) , z)
 
 
 
-    <matplotlib.collections.PathCollection at 0x7f6204b027c0>
+    <matplotlib.collections.PathCollection at 0x7f6204a1d8b0>
 
 
 
 
     
-![png](README_files/README_18_1.png)
+![png](README_files/README_19_1.png)
     
 
 
