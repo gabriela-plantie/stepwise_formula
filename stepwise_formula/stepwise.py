@@ -23,15 +23,31 @@ def stepwise(formula, dataframe, model_type):
 class Model:
     def __init__(self, model):
         self.model = model
-        final_vars = ' + '.join(list(model.params.index[1:]))
+        self.params= list(model.params.index)
+        final_vars = ' + '.join(self.params)
         self._formula = Formula.fromString(final_vars)
 
     def predict(self, dataframe):
+        print('prediction')
         dataframe = dataframe.copy()
         for term in filter(lambda x: isinstance(x, Formula), self._formula.terms()):
             dataframe[term.__repr__()] = term.apply(dataframe)
     
-        usedFields = map(lambda x: x.__repr__() if isinstance(x, Formula) else x, self._formula.terms())
-        X = dataframe[usedFields]
+        usedFields = list(map(lambda x: x.__repr__() if isinstance(x, Formula) else x, self._formula.terms()))
+        
+        if 'intercept' in self.params:
+            dataframe['intercept'] = 1
+
+        X = dataframe[self.params] #se rompe si no tiene el orden
+                                    #se rompe cuando hay intercepto 
         print(X.columns)
-        return self.model.predict(X) 
+        #return X
+        return TestResults(X, self.model.predict(X))
+
+
+
+class TestResults:
+    def __init__(self, testDataframe, prediction):
+        self.testDataframe = testDataframe
+        self.prediction= prediction
+
