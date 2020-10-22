@@ -238,7 +238,7 @@ t
 
 
 
-## filter final list of variables by pvalue
+## Plot model logit vs original logit
 
 
 ```python
