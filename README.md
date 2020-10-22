@@ -1,6 +1,6 @@
 ## What it does:
 
-This package receives a data frame and function that could have multiplicative terms and runs setpwise selection from this package.
+This packages receives a data frame and function that could have multiplicative terms and runs setpwise selection from this package.
 
 https://github.com/talhahascelik/python_stepwiseSelection
 
@@ -25,22 +25,32 @@ import scipy as sc
 from matplotlib import pyplot as plt
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
+import random
 ```
 
 ## create table with simulated data
 
 
 ```python
-x1=np.random.normal(0,1,1000)
-x2=np.random.normal(0,1,1000)
-x3=np.random.normal(0,1,1000)
-x4=np.random.normal(0,1,1000)/5
 
-z=1 + 2*x1 + x2 + 2*x2*x3 + x4
-pr=1/(1+np.exp(-z))
-y=sc.stats.binom.rvs(1, pr, size=1000)
-df = pd.DataFrame(data={'y':y, 'x1':x1, 'x2':x2, 'x3':x3, 'x4':x4})
+def create_df(seed):
+    np.random.seed(seed)
+    x1=np.random.normal(0,1,1000)
+    x2=np.random.normal(0,1,1000)
+    x3=np.random.normal(0,1,1000)
+    x4=np.random.normal(0,1,1000)/5
 
+    z=1 + 2*x1 + x2 + 2*x2*x3 +x4
+    pr=1/(1+np.exp(-z))
+    y=sc.stats.binom.rvs(1, pr, size=1000)
+    df = pd.DataFrame(data={'y':y, 'x1':x1, 'x2':x2, 'x3':x3, 'x4':x4})
+    return [df,z]
+```
+
+
+```python
+df= create_df(30)[0]
+z= create_df(30)[1]
 ```
 
 ## Define formula
@@ -54,104 +64,191 @@ formula = 'y ~  x2*x3 + x1:x4 '
 
 
 ```python
-a = stepwise(formula, df, 'logistic')
+model = stepwise(formula, df, 'logistic')
 ```
 
-    {x2*x3, x1*x4, 'x3', 'x2'}
+    {'x3', x2*x3, 'x2', x1*x4}
     Character Variables (Dummies Generated, First Dummies Dropped): []
     Optimization terminated successfully.
-             Current function value: 0.394587
-             Iterations 7
+             Current function value: 0.541247
+             Iterations 6
     Eliminated : x3
     Optimization terminated successfully.
-             Current function value: 0.394595
-             Iterations 7
-    Eliminated : x1*x4
-    Optimization terminated successfully.
-             Current function value: 0.396311
-             Iterations 7
-    Regained :  x1*x4
+             Current function value: 0.541255
+             Iterations 6
                                Logit Regression Results                           
     ==============================================================================
     Dep. Variable:                      y   No. Observations:                 1000
-    Model:                          Logit   Df Residuals:                      994
-    Method:                           MLE   Df Model:                            5
-    Date:                Wed, 07 Oct 2020   Pseudo R-squ.:                  0.4026
-    Time:                        13:48:16   Log-Likelihood:                -394.60
+    Model:                          Logit   Df Residuals:                      996
+    Method:                           MLE   Df Model:                            3
+    Date:                Thu, 22 Oct 2020   Pseudo R-squ.:                  0.1806
+    Time:                        15:38:16   Log-Likelihood:                -541.26
     converged:                       True   LL-Null:                       -660.53
-    Covariance Type:            nonrobust   LLR p-value:                1.049e-112
+    Covariance Type:            nonrobust   LLR p-value:                 1.954e-51
     ==============================================================================
                      coef    std err          z      P>|z|      [0.025      0.975]
     ------------------------------------------------------------------------------
-    intercept      0.9307      0.097      9.556      0.000       0.740       1.122
-    x1             1.8153      0.134     13.545      0.000       1.553       2.078
-    x2             0.7976      0.111      7.154      0.000       0.579       1.016
-    x4             0.8838      0.449      1.968      0.049       0.004       1.764
-    x2*x3          1.9254      0.165     11.660      0.000       1.602       2.249
-    x1*x4         -1.0898      0.579     -1.881      0.060      -2.226       0.046
+    intercept      0.6208      0.075      8.286      0.000       0.474       0.768
+    x2*x3          1.3555      0.122     11.097      0.000       1.116       1.595
+    x2             0.6711      0.093      7.240      0.000       0.489       0.853
+    x1*x4          1.3253      0.371      3.574      0.000       0.599       2.052
     ==============================================================================
-    AIC: 801.1906769633258
-    BIC: 830.6372086372187
-    Final Variables: ['intercept', 'x1', 'x2', 'x4', 'x2*x3', 'x1*x4']
+    AIC: 1090.51050046908
+    BIC: 1110.1415215850084
+    Final Variables: ['intercept', 'x2*x3', 'x2', 'x1*x4']
+
+
+## Predicction on another dataset
+
+
+```python
+t=testResults.testDataframe
+```
+
+
+```python
+t['pred']= model.model.predict(t[model.model.params.index])
+```
+
+
+```python
+t
+```
+
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>intercept</th>
+      <th>x2*x3</th>
+      <th>x2</th>
+      <th>x1*x4</th>
+      <th>ord</th>
+      <th>pred</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1</td>
+      <td>0.139584</td>
+      <td>0.452175</td>
+      <td>-0.142610</td>
+      <td>0.715952</td>
+      <td>0.715952</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>-0.830760</td>
+      <td>1.134899</td>
+      <td>-0.016467</td>
+      <td>0.558363</td>
+      <td>0.558363</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1</td>
+      <td>-0.046015</td>
+      <td>0.077442</td>
+      <td>-0.178077</td>
+      <td>0.592518</td>
+      <td>0.592518</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>-0.494669</td>
+      <td>0.226821</td>
+      <td>0.098642</td>
+      <td>0.558039</td>
+      <td>0.558039</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1</td>
+      <td>0.189129</td>
+      <td>0.526648</td>
+      <td>-0.051086</td>
+      <td>0.761861</td>
+      <td>0.761861</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>995</th>
+      <td>1</td>
+      <td>-0.164495</td>
+      <td>0.897219</td>
+      <td>-0.107829</td>
+      <td>0.702047</td>
+      <td>0.702047</td>
+    </tr>
+    <tr>
+      <th>996</th>
+      <td>1</td>
+      <td>-0.256417</td>
+      <td>-0.577262</td>
+      <td>-0.017205</td>
+      <td>0.465798</td>
+      <td>0.465798</td>
+    </tr>
+    <tr>
+      <th>997</th>
+      <td>1</td>
+      <td>0.125015</td>
+      <td>0.904900</td>
+      <td>-0.002307</td>
+      <td>0.801311</td>
+      <td>0.801311</td>
+    </tr>
+    <tr>
+      <th>998</th>
+      <td>1</td>
+      <td>0.405615</td>
+      <td>1.120783</td>
+      <td>-0.008264</td>
+      <td>0.871228</td>
+      <td>0.871228</td>
+    </tr>
+    <tr>
+      <th>999</th>
+      <td>1</td>
+      <td>-0.276153</td>
+      <td>-0.420349</td>
+      <td>0.077656</td>
+      <td>0.516808</td>
+      <td>0.516808</td>
+    </tr>
+  </tbody>
+</table>
+<p>1000 rows × 6 columns</p>
+</div>
+
 
 
 ## filter final list of variables by pvalue
 
 
 ```python
-np.round(a[2].params[a[2].pvalues<0.01],2)
+plt.scatter(list(map(lambda p: np.log(p/(1-p)), t['pred'])) , z)
 ```
 
 
 
 
-    intercept    0.93
-    x1           1.82
-    x2           0.80
-    x2*x3        1.93
-    dtype: float64
-
-
-
-## generate model with resulting varibles
-
-
-```python
-formula = 'y ~ x1 + x2 + x2:x3'
-model = smf.glm(formula = formula, data=df, family=sm.families.Binomial())
-mod = model.fit()
-```
-
-
-```python
-np.round(mod.params[mod.pvalues<0.01],2)
-```
-
-
-
-
-    Intercept    0.92
-    x1           1.80
-    x2           0.78
-    x2:x3        1.89
-    dtype: float64
-
-
-
-
-```python
-pred=mod.predict(df)
-```
-
-
-```python
-plt.scatter(pr, pred)
-```
-
-
-
-
-    <matplotlib.collections.PathCollection at 0x7f18adb912b0>
+    <matplotlib.collections.PathCollection at 0x7f6204b027c0>
 
 
 
@@ -163,15 +260,5 @@ plt.scatter(pr, pred)
 
 
 ```python
-
-```
-
-
-```python
 #jupyter nbconvert README.ipynb --to markdown
-```
-
-
-```python
-
 ```
