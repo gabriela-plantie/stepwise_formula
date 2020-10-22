@@ -119,7 +119,7 @@ def __varcharProcessing__(X, varchar_process = "dummy_dropfirst"):
     
     return X
 
-def __forwardSelectionRaw__(X, y, model_type ="linear",elimination_criteria = "aic", sl=0.05):
+def __forwardSelectionRaw__(X, y, model_type ="linear", elimination_criteria = "aic", sl=0.05):
 
     iterations_log = ""
     cols = X.columns.tolist()

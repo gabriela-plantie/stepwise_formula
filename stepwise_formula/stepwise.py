@@ -1,7 +1,7 @@
 from .stepwiseSelector import backwardSelection
 from .formula import Formula
 
-def stepwise(formula, dataframe, model_type):
+def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl=sl):
     formula = formula.replace(' ', '')
     splitted = formula.split('~')
     y_name = splitted[0]
@@ -16,7 +16,7 @@ def stepwise(formula, dataframe, model_type):
     X = dataframe[usedFields]
     y = dataframe[y_name]
 
-    backwardModel = backwardSelection(X,y, model_type=model_type)
+    backwardModel = backwardSelection(X,y, model_type=model_type,elimination_criteria=elimination_criteria, sl=sl )
     return Model(backwardModel[2])
 
 
