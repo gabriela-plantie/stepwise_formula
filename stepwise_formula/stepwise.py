@@ -1,7 +1,7 @@
 from .stepwiseSelector import backwardSelection
 from .formula import Formula
 
-def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl=sl):
+def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.05):
     formula = formula.replace(' ', '')
     splitted = formula.split('~')
     y_name = splitted[0]
