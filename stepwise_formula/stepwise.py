@@ -27,23 +27,24 @@ def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.0
     if verbose == False:
         sys.stdout = sys.__stdout__
 
-    return Model(backwardModel[2])
+    return Model(backwardModel[2], model_type)
 
 
 class Model:
-    def __init__(self, model):
+    def __init__(self, model, model_type):
         self.model = model
         self.params= list(model.params.index)
         final_vars = ' + '.join(self.params)
         self._formula = Formula.fromString(final_vars)
+        self.model_type = model_type
 
-    def predict(self, dataframe):
+    def predict(self, dataframe, alpha):
         #print('prediction')
         dataframe = dataframe.copy()
         for term in filter(lambda x: isinstance(x, Formula), self._formula.terms()):
             dataframe[term.__repr__()] = term.apply(dataframe)
     
-        usedFields = list(map(lambda x: x.__repr__() if isinstance(x, Formula) else x, self._formula.terms()))
+        #usedFields = list(map(lambda x: x.__repr__() if isinstance(x, Formula) else x, self._formula.terms()))
         
         if 'intercept' in self.params:
             dataframe['intercept'] = 1
@@ -51,13 +52,23 @@ class Model:
         X = dataframe[self.params] #se rompe si no tiene el orden
                                     #se rompe cuando hay intercepto 
 
-        #return X
-        return TestResults(X, self.model.predict(X))
+        if self.model_type=='linear':
+            tbl_prediction = self.model.get_prediction(X)
+            intervals = tbl_prediction.summary_frame(alpha= alpha)
+            prediction= intervals['mean']
+        else:
+            prediction = self.model.predict(X)
+            intervals = None
+            
+        return TestResults(X, prediction, intervals)
+
+        
 
 
 
 class TestResults:
-    def __init__(self, testDataframe, prediction):
+    def __init__(self, testDataframe, prediction, intervals = None):
         self.testDataframe = testDataframe
         self.prediction= prediction
+        self.intervals = intervals
 
