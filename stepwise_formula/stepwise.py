@@ -3,10 +3,8 @@ from .formula import Formula
 
 
 def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.05, verbose = True):
-    
+    import sys, os
     if verbose == False:
-        import sys, os
-        original_stdout = sys.stdout
         sys.stdout = open(os.devnull, 'w')
     
     formula = formula.replace('\n', ' ')
@@ -27,7 +25,7 @@ def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.0
     backwardModel = backwardSelection(X,y, model_type=model_type,elimination_criteria=elimination_criteria, sl=sl)
 
     if verbose == False:
-        sys.stdout = original_stdout
+        sys.stdout = sys.__stdout__
 
     return Model(backwardModel[2])
 
