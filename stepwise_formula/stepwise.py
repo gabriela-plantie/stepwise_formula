@@ -2,7 +2,13 @@ from .stepwiseSelector import backwardSelection
 from .formula import Formula
 
 
-def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.05):
+def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.05, verbose = True):
+    
+    if verbose == False:
+        import sys, os
+        original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+    
     formula = formula.replace('\n', ' ')
     formula = formula.replace(' ', '')
     splitted = formula.split('~')
@@ -18,7 +24,11 @@ def stepwise(formula, dataframe, model_type, elimination_criteria='aic', sl= 0.0
     X = dataframe[usedFields]
     y = dataframe[y_name]
 
-    backwardModel = backwardSelection(X,y, model_type=model_type,elimination_criteria=elimination_criteria, sl=sl )
+    backwardModel = backwardSelection(X,y, model_type=model_type,elimination_criteria=elimination_criteria, sl=sl)
+
+    if verbose == False:
+        sys.stdout = original_stdout
+
     return Model(backwardModel[2])
 
 
@@ -30,7 +40,7 @@ class Model:
         self._formula = Formula.fromString(final_vars)
 
     def predict(self, dataframe):
-        print('prediction')
+        #print('prediction')
         dataframe = dataframe.copy()
         for term in filter(lambda x: isinstance(x, Formula), self._formula.terms()):
             dataframe[term.__repr__()] = term.apply(dataframe)
@@ -42,7 +52,7 @@ class Model:
 
         X = dataframe[self.params] #se rompe si no tiene el orden
                                     #se rompe cuando hay intercepto 
-        print(X.columns)
+
         #return X
         return TestResults(X, self.model.predict(X))
 

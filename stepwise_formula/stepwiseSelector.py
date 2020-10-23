@@ -56,7 +56,7 @@ def forwardSelection(X, y, model_type ="linear",elimination_criteria = "aic", va
     X = __varcharProcessing__(X,varchar_process = varchar_process)
     return __forwardSelectionRaw__(X, y, model_type = model_type,elimination_criteria = elimination_criteria , sl=sl)
     
-def backwardSelection(X, y, model_type ="linear",elimination_criteria = "aic", varchar_process = "dummy_dropfirst", sl=0.05):
+def backwardSelection(X, y, model_type ="linear", elimination_criteria = "aic", varchar_process = "dummy_dropfirst", sl=0.05):
     """
     Backward Selection is a function, based on regression models, that returns significant features and selection iterations.\n
     Required Libraries: pandas, numpy, statmodels

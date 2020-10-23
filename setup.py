@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="stepwise_formula",
-    version="0.1.7",
+    version="0.1.8",
     author="Gabriela Plantie",
     author_email="glplantie@gmail.com",
     description="Stepwise Formula",
