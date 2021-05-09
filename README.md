@@ -16,10 +16,6 @@ https://github.com/talhahascelik/python_stepwiseSelection
 ```python
 from stepwise_formula.stepwise import stepwise
 ```
-# de las carpetas
-from stepwise_formula.stepwiseSelector import backwardSelection
-from stepwise_formula.formula import Formula
-from stepwise_formula.stepwise import stepwise
 
 ```python
 import pandas as pd
