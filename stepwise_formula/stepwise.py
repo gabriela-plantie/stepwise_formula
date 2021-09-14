@@ -109,7 +109,8 @@ class Model:
         for intercept in intercepts:
             dataframe[intercept] = 1
 
-        X = dataframe[self.params] #se rompe si no tiene el orden
+        
+        X = dataframe[map(lambda x: x.replace(':', '*'), self.params)] #se rompe si no tiene el orden
                                     #se rompe cuando hay intercepto 
 
         if self.model_type=='linear':
