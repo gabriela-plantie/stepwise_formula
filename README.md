@@ -1,6 +1,6 @@
 ## What it does:
 
-This packages receives a data frame and function that could have multiplicative terms and runs setpwise selection from this package.
+This packages receives a data frame and function that could have multiplicative terms and runs setpwise selection from this package:
 
 https://github.com/talhahascelik/python_stepwiseSelection
 
